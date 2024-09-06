@@ -9,7 +9,8 @@ import (
 func main() {
 	// Connect to the server at IP 192.168.1.10 and port 8080
 	// Replace with the server IP if the server is on another device
-	serverAddress := "192.168.1.10:8080"
+
+	serverAddress := "192.168.79.145:8080"
 	conn, err := net.Dial("tcp", serverAddress)
 	if err != nil {
 		fmt.Println("Error connecting to server:", err)
