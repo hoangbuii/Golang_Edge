@@ -1,3 +1,10 @@
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
 func listenBroadcast() {
 	// Set the port to listen on (same as the broadcast port)
 	listenAddr := ":8989"
