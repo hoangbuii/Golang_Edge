@@ -57,7 +57,7 @@ func handleClient(conn net.Conn, clientAddr string) {
 	}()
 	
 	// state [idle, connected, disconnected]
-	state = "idle"
+	state := "idle"
 
 	reader := bufio.NewReader(conn)
 	for {
