@@ -90,7 +90,7 @@ func handleClient(conn net.Conn, clientAddr string) {
 			if err != nil {
 				log.Fatalf("Error getting join token: %v", err)
 			}
-			response := "info|" + strings.TrimSuffix(token, "\n") + "|2377"
+			response := "info|2377|" + token 
 			fmt.Println("Send from server:", response)
 			_, err = conn.Write([]byte(response))
 			if err != nil {

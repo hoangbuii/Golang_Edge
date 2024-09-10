@@ -38,14 +38,15 @@ func setupTCPConnection(managerIP string, port int) {
 			fmt.Println("Error reading from server:", err)
 			return
 		}
-		response = strings.TrimSpace(response)
 		fmt.Println("Received from server:", response)
+		// response = strings.TrimSpace(response)
+		
 		parts := strings.Split(response, "|")
 		command := parts[0]
 
 		if command == "info" && state == "connecting" {
-			token := parts[1]
-			managerAddr := managerIP + ":" + parts[2]
+			token := parts[2]
+			managerAddr := managerIP + ":" + parts[1]
 			err := joinSwarmCluster(token, managerAddr)
 			if err != nil {
 				fmt.Println("Erorr to join cluster:", err)
