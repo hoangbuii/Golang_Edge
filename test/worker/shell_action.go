@@ -22,15 +22,16 @@ func setExecutablePermissions() error {
 	return nil
 }
 
-func joinSwarmCluster(token string, managerIP string) err {
-	cmd := exec.Command("bash", "-c", "./actions/join_cluster.sh " + token + " " + managerIP)
+func joinSwarmCluster(token string, managerAddr string) error {
+	cmd := exec.Command("bash", "-c", "./actions/join_cluster.sh " + token + " " + managerAddr)
+
 	_, err := cmd.Output()
 	return err
 }
 
-func main() {
-	err := joinSwarmCluster("SWMTKN-1-2hb55s7157dkx2nqot3cphvkhuxcpkgpsahxpvqq50bu1jfrvz-b4tungf3rxjq5a89ryfzr65m7", "192.168.79.145:2377")
-	if err != nil {
-		fmt.Printf("Error executing script: %s\n", err)
-	}
-}
+// func main() {
+// 	err := joinSwarmCluster("SWMTKN-1-2hb55s7157dkx2nqot3cphvkhuxcpkgpsahxpvqq50bu1jfrvz-b4tungf3rxjq5a89ryfzr65m7", "192.168.79.145:2377")
+// 	if err != nil {
+// 		fmt.Printf("Error executing script: %s\n", err)
+// 	}
+// }
