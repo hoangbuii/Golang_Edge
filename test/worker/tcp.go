@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"strconv"
+	"log"
 )
 
 func setupTCPConnection(managerIP string, port int) {
@@ -17,9 +18,10 @@ func setupTCPConnection(managerIP string, port int) {
 		os.Exit(1)
 	}
 	defer conn.Close()
+	fmt.Println("Connected to server")
 
 	// Start reading user input and sending it to the server
-	reader := bufio.NewReader(os.Stdin)
+	//reader := bufio.NewReader(os.Stdin)
 
 	message := "connect|Manager|12345678"
 	_, err = conn.Write([]byte(message + "\n"))
@@ -27,6 +29,7 @@ func setupTCPConnection(managerIP string, port int) {
 		fmt.Println("Error sending to server:", err)
 		return
 	}
+	fmt.Println("Sent connect command to server")
 	// state [idle, connecting, connected, disconnected]
 	state := "connecting"
 	for {
@@ -36,6 +39,7 @@ func setupTCPConnection(managerIP string, port int) {
 			return
 		}
 		response = strings.TrimSpace(response)
+		fmt.Println("Received from server:", response)
 		parts := strings.Split(response, "|")
 		command := parts[0]
 
