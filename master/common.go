@@ -3,4 +3,5 @@ package main
 const (
 	BROADCAST_PORT = 8989
 	TCP_PORT = 8080
+	JOIN_PASSWORD = 12345678
 )

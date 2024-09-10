@@ -89,6 +89,7 @@ func handleClient(conn net.Conn, clientAddr string) {
 
 		if command == "exit" {
 			fmt.Println("Client requested to disconnect:", clientAddr)
+			state = "disconnected"
 			return // Gracefully close the connection
 		}
 
