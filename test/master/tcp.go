@@ -87,10 +87,10 @@ func handleClient(conn net.Conn, clientAddr string) {
 		if command == "connect" && (state == "idle" || state == "disconnected") {
 
 			token, err := getJoinToken()
-
 			if err != nil {
 				log.Fatalf("Error getting join token: %v", err)
 			}
+			response := "info|" + token + "|2377"
 			_, err = conn.Write([]byte(token))
 			if err != nil {
 				fmt.Println("Error sending to client:", err)

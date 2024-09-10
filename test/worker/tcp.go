@@ -91,5 +91,9 @@ func setupTCPConnection(managerIP string, port int) {
 }
 
 func main() {
+	err := setExecutablePermissions()
+	if err != nil {
+		log.Fatalf("Error set excutable for the script: %v", err)
+	}
 	setupTCPConnection("192.168.79.145", 8080)
 }
