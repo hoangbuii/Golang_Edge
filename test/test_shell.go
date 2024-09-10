@@ -7,8 +7,9 @@ import (
 )
 
 func setExecutablePermissions() error {
-	actions_list = []strings {
-		"./actions/get_join_token.sh"
+	actions_list = []string {
+		"./actions/get_join_token.sh",
+		"./actions/list_node.sh",
 	}
 
 	for index, action := range actions_list {
