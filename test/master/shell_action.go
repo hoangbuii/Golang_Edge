@@ -33,3 +33,12 @@ func getJoinToken() (string, error) {
 	return token, err
 	
 }
+
+func listSwarmNode() {
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("Error executing script: %s\n", err)
+		return
+	}
+	fmt.Printf("Node list:\n%s\n", output)
+}

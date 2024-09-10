@@ -21,6 +21,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error set excutable for the script: %v", err)
 	}
+	go setupTCPConnection()
+}
+
+func setupTCPConnection() {
 	// Start the server and listen for connections
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -30,7 +34,7 @@ func main() {
 	defer listener.Close()
 
 	fmt.Println("Server started on port 8080")
-	
+
 
 	for {
 		// Accept new client connections
@@ -60,9 +64,10 @@ func handleClient(conn net.Conn, clientAddr string) {
 		clientsMu.Unlock()
 		conn.Close()
 		fmt.Println("Client disconnected:", clientAddr)
+		listSwarmNode()
 	}()
 	
-	// state [idle, connected, disconnected]
+	// state [idle, connecting, connected, disconnected]
 	state := "idle"
 
 	reader := bufio.NewReader(conn)
@@ -86,16 +91,17 @@ func handleClient(conn net.Conn, clientAddr string) {
 			if err != nil {
 				log.Fatalf("Error getting join token: %v", err)
 			}
-			_, err = conn.Write([]byte("joint token: " + token + "\n"))
+			_, err = conn.Write([]byte(token))
 			if err != nil {
 				fmt.Println("Error sending to client:", err)
 				return
 			}
-			state = "connected"
+			state = "connecting"
 		}
 
-		if command == "done" && (state == "connected") {
+		if command == "done" && (state == "connecting") {
 			fmt.Println("ok")
+			state = "connected"
 		}
 
 		if command == "exit" {
@@ -104,30 +110,13 @@ func handleClient(conn net.Conn, clientAddr string) {
 			return // Gracefully close the connection
 		}
 
-		
-		//handleMessage(message)
-
-		// Check if the client wants to disconnect
-		// if message == "exit" {
-		// 	fmt.Println("Client requested to disconnect:", clientAddr)
-		// 	return // Gracefully close the connection
-		// }
-
 		fmt.Println("Received from", clientAddr+":", message)
 
 		// Echo the message back to the client
-		_, err = conn.Write([]byte("Server echo: " + message + "\n"))
-		if err != nil {
-			fmt.Println("Error sending to client:", err)
-			return
-		}
+		// _, err = conn.Write([]byte("Server echo: " + message + "\n"))
+		// if err != nil {
+		// 	fmt.Println("Error sending to client:", err)
+		// 	return
+		// }
 	}
 }
-
-// func handleMessage(message string) {
-// 	parts := strings.Split(message, "|")
-
-// 	command := parts[0]
-
-// 	if command == "connect" 
-// }
