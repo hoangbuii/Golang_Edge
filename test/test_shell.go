@@ -7,7 +7,7 @@ import (
 )
 
 func setExecutablePermissions() error {
-	actions_list = []string {
+	actions_list := []string {
 		"./actions/get_join_token.sh",
 		"./actions/list_node.sh",
 	}
@@ -16,7 +16,7 @@ func setExecutablePermissions() error {
 		cmd := exec.Command("bash", "-c", "chmod +x " + action)
 		
 		output, err := cmd.Output()
-		if err != nil {
+		if output != "" || err != nil {
 			fmt.Printf("Error executing script: %s\n", err)
 			return err
 		}
