@@ -15,6 +15,11 @@ var (
 )
 
 func main() {
+	// Set Executable Permissions for all script
+	err := setExecutablePermissions()
+	if err != nil {
+		log.Fatalf("Error set excutable for the script: %v", err)
+	}
 	// Start the server and listen for connections
 	listener, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -74,8 +79,13 @@ func handleClient(conn net.Conn, clientAddr string) {
 		command := parts[0]
 
 		if command == "connect" && (state == "idle" || state == "disconnected") {
-			join_token := "dbafkhebbdsahfjrhfrYBSh7DBGEH&hndjf"
-			_, err = conn.Write([]byte("Server echo: " + join_token + "\n"))
+
+			token, err := getJoinToken()
+
+			if err != nil {
+				log.Fatalf("Error getting join token: %v", err)
+			}
+			_, err = conn.Write([]byte("joint token: " + token + "\n"))
 			if err != nil {
 				fmt.Println("Error sending to client:", err)
 				return
