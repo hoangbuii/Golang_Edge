@@ -32,17 +32,3 @@ func getJoinToken() (string, error) {
 	return output, err
 	
 }
-
-func main() {
-	err := setExecutablePermissions()
-	if err != nil {
-		log.Fatalf("Error set excutable for the script: %v", err)
-	}
-	token, err := getJoinToken()
-
-	if err != nil {
-		log.Fatalf("Error running the script: %v", err)
-	}
-	fmt.Printf("Script Output: %s\n", token)
-	
-}
