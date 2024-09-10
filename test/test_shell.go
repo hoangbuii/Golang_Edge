@@ -30,7 +30,8 @@ func getJoinToken() (string, error) {
 
 	// Run the command and capture the output
 	output, err := cmd.Output()
-	return output, err
+	token := string(output)
+	return token, err
 	
 }
 
