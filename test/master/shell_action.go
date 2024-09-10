@@ -35,6 +35,7 @@ func getJoinToken() (string, error) {
 }
 
 func listSwarmNode() {
+	cmd := exec.Command("bash", "-c", "./actions/list_node.sh")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Printf("Error executing script: %s\n", err)
