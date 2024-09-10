@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"log"
 )
 
 var (
