@@ -21,7 +21,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error set excutable for the script: %v", err)
 	}
-	go setupTCPConnection()
+	setupTCPConnection()
 }
 
 func setupTCPConnection() {

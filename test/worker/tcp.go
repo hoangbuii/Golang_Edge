@@ -1,37 +1,53 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
 	"os"
+	"strings"
+	"strconv"
 )
 
-func main() {
-	// Connect to the server at IP 192.168.1.10 and port 8080
-	// Replace with the server IP if the server is on another device
-
-	serverAddress := "192.168.79.145:8080"
-	conn, err := net.Dial("tcp", serverAddress)
+func setupTCPConnection(managerIP string, port int) {
+	// Connect to the server
+	conn, err := net.Dial("tcp", managerIP + ":" + strconv.Itoa(port))
 	if err != nil {
 		fmt.Println("Error connecting to server:", err)
 		os.Exit(1)
 	}
 	defer conn.Close()
 
-	fmt.Println("Connected to server:", serverAddress)
-
-
+	// Start reading user input and sending it to the server
+	reader := bufio.NewReader(os.Stdin)
 	for {
-		var message string
-		fmt.Scanln(&message)
-		// Send a "connect" signal to the server
-		//message := "connect"
-		_, err = conn.Write([]byte(message))
+		fmt.Print("Enter message (type 'exit' to disconnect): ")
+		message, _ := reader.ReadString('\n')
+		message = strings.TrimSpace(message)
+
+		// Send the message to the server
+		_, err = conn.Write([]byte(message + "\n"))
 		if err != nil {
-			fmt.Println("Error sending message:", err)
+			fmt.Println("Error sending to server:", err)
 			return
 		}
 
-		fmt.Printf("Sent message to server: %s\n", message)
+		// If the client sends "exit", break the loop to disconnect
+		if message == "exit" {
+			fmt.Println("Disconnecting from server...")
+			break
+		}
+
+		// Read the server's response
+		response, err := bufio.NewReader(conn).ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading from server:", err)
+			return
+		}
+		fmt.Println("Received from server:", response)
 	}
+}
+
+func main() {
+	setupTCPConnection("192.168.79.145", 8080)
 }
