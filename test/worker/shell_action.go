@@ -30,11 +30,14 @@ func joinSwarmCluster(token string, managerAddr string) error {
 	return err
 }
 
-func leaveSwarm() error {
+func leaveSwarm() {
 	cmd := exec.Command("bash", "-c", "./actions/leave_swarm.sh")
 
 	_, err := cmd.Output()
-	return err
+	if err != nil {
+		fmt.Printf("Error executing script: %s\n", err)
+		return
+	}
 }
 
 // func main() {

@@ -9,7 +9,7 @@ func setExecutablePermissions() error {
 	actions_list := []string {
 		"./actions/get_join_token.sh",
 		"./actions/list_node.sh",
-		"./actions/remove_down_node.sh"
+		"./actions/remove_down_node.sh",
 	}
 
 	for _, action := range actions_list {
@@ -46,7 +46,7 @@ func listSwarmNode() {
 }
 
 func removeDownNode() {
-	cmd := exec.Command("bash", "-c", "./actions/list_node.sh")
+	cmd := exec.Command("bash", "-c", "./actions/remove_down_node.sh")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Printf("Error executing script: %s\n", err)
