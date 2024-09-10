@@ -64,7 +64,7 @@ func handleClient(conn net.Conn, clientAddr string) {
 		clientsMu.Unlock()
 		conn.Close()
 		fmt.Println("Client disconnected:", clientAddr)
-		listSwarmNode()
+		removeDownNode()
 	}()
 	
 	// state [idle, connecting, connected, disconnected]

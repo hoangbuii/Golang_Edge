@@ -8,6 +8,7 @@ import (
 func setExecutablePermissions() error {
 	actions_list := []string {
 		"./actions/join_cluster.sh",
+		"./actions/leave_swarm.sh",
 	}
 
 	for _, action := range actions_list {
@@ -24,6 +25,13 @@ func setExecutablePermissions() error {
 
 func joinSwarmCluster(token string, managerAddr string) error {
 	cmd := exec.Command("bash", "-c", "./actions/join_cluster.sh " + token + " " + managerAddr)
+
+	_, err := cmd.Output()
+	return err
+}
+
+func leaveSwarm() error {
+	cmd := exec.Command("bash", "-c", "./actions/leave_swarm.sh")
 
 	_, err := cmd.Output()
 	return err
