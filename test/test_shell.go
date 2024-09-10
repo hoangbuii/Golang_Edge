@@ -12,11 +12,11 @@ func setExecutablePermissions() error {
 		"./actions/list_node.sh",
 	}
 
-	for index, action := range actions_list {
+	for _, action := range actions_list {
 		cmd := exec.Command("bash", "-c", "chmod +x " + action)
 		
-		output, err := cmd.Output()
-		if output != "" || err != nil {
+		_, err := cmd.Output()
+		if err != nil {
 			fmt.Printf("Error executing script: %s\n", err)
 			return err
 		}
