@@ -68,7 +68,7 @@ func setupTCPConnection(managerIP string, port int) {
 }
 
 func main() {
-		leaveSwarm()
+	leaveSwarm()
         err := setExecutablePermissions()
         if err != nil {
                 log.Fatalf("Error set excutable for the script: %v", err)

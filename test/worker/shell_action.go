@@ -45,4 +45,4 @@ func leaveSwarm() {
 // 	if err != nil {
 // 		fmt.Printf("Error executing script: %s\n", err)
 // 	}
-// }
+// }  

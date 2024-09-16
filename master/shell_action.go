@@ -32,5 +32,4 @@ func getJoinToken() (string, error) {
 	output, err := cmd.Output()
 	token := string(output)
 	return token, err
-	
 }

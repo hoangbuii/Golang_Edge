@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"strconv"
 )
 
-func broadcastToLAN() {
-	port := ":8989"
-	broadcastAddr, err := getBoardcastAddr("ens33")
-	message := "Manager"
+func broadcastToLAN(interface string, port int , managerID string) {
+	// port := 8989
+	broadcastAddr, err := getBoardcastAddr(interface)
+	message := managerID
 
 	
 	if err != nil {
@@ -19,7 +20,7 @@ func broadcastToLAN() {
 	fmt.Println("Broadcast:", broadcastAddr)
 	// Set the broadcast address and port
 	//broadcastAddr := "192.168.79.255:8989"
-	broadcastAddr = broadcastAddr + port
+	broadcastAddr = broadcastAddr + ":" +  strconv.Itoa(port)
 	
 
 	// Create a UDP address
