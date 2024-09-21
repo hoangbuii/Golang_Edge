@@ -38,13 +38,27 @@ func listenBroadcast() {
 
 		// Print the received message
 		message := string(buffer[:n])
+
+		parts := strings.Split(message, "|")
+		command := parts[0]
+
+		if command == "SCAN" {
+			token, err := getJoinToken()
+			if err != nil {
+				log.Fatalf("Error getting join token: %v", err)
+			}
+			token = strings.TrimSuffix(token, "\n")
+			information = "INFO|" + token + "|2377" 
+			_, err = conn.WriteToUDP([]byte(information), addr)
+			if err != nil {
+				fmt.Println("Error sending echo message:", err)
+			} else {
+				fmt.Println("send message back to", addr)
+			}
+		}
+
 		fmt.Printf("Received message from %s: %s\n", addr, message)
 
-		_, err = conn.WriteToUDP([]byte(message), addr)
-		if err != nil {
-			fmt.Println("Error sending echo message:", err)
-		} else {
-			fmt.Println("Echoed message back to", addr)
-		}
+		
 	}
 }

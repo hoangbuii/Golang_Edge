@@ -7,15 +7,16 @@ import (
 	"strconv"
 )
 
-func broadcastToLAN(iface string, port int, managerID string) {
+func broadcastToLAN(iface string, port int, content string) {
 	// port := 8989
 	broadcastAddr, err := getBoardcastAddr(iface)
-	message := managerID
+	ifaceIP, err := getIPAddress
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
+	message := "SCAN|" + content
 	fmt.Println("Broadcast:", broadcastAddr)
 	// Set the broadcast address and port
 	//broadcastAddr := "192.168.79.255:8989"

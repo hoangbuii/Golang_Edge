@@ -135,3 +135,32 @@ func getBoardcastAddr(interfaceName string) (string, error) {
 
 	return "", fmt.Errorf("no IPv4 address found for interface %s", interfaceName)
 }
+
+// GetIPAddress retrieves the IP address of the specified network interface.
+func getIPAddress(interfaceName string) (string, error) {
+	// Find the network interface by name
+	iface, err := net.InterfaceByName(interfaceName)
+	if err != nil {
+		return "", fmt.Errorf("error getting interface %s: %v", interfaceName, err)
+	}
+
+	// Get the addresses associated with the interface
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return "", fmt.Errorf("error getting addresses for interface %s: %v", interfaceName, err)
+	}
+
+	// Iterate over addresses to find the IP address (prefer IPv4)
+	for _, addr := range addrs {
+		switch v := addr.(type) {
+		case *net.IPNet:
+			if v.IP.To4() != nil {
+				// Return the IPv4 address
+				return v.IP.String(), nil
+			}
+		}
+	}
+
+	// Return an error if no IPv4 address was found
+	return "", fmt.Errorf("no IPv4 address found for interface %s", interfaceName)
+}
