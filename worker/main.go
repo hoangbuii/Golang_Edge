@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
 func main() {
-	showNetworkConfiguration()
-	go listenBroadcast()
+	err := setExecutablePermissions()
+	if err != nil {
+		log.Fatalf("Error set excutable for the script: %v", err)
+	}
+	go broadcastToLAN("ens33", 8989, "Manager")
 	for {
 		var input string
 		fmt.Scanln(&input)

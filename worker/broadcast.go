@@ -5,39 +5,57 @@ import (
 	"net"
 )
 
-func listenBroadcast() {
-	// Set the port to listen on (same as the broadcast port)
-	listenAddr := ":8989"
+func broadcastToLAN(iface string, port int, managerID string) {
+	// port := 8989
+	broadcastAddr, err := getBoardcastAddr(iface)
+	message := managerID
 
-	// Create a UDP address for listening
-	udpAddr, err := net.ResolveUDPAddr("udp", listenAddr)
+	
 	if err != nil {
-		fmt.Println("Error resolving UDP address:", err)
+		fmt.Println("Error:", err)
 		return
 	}
+	fmt.Println("Broadcast:", broadcastAddr)
+	// Set the broadcast address and port
+	//broadcastAddr := "192.168.79.255:8989"
+	broadcastAddr = broadcastAddr + ":" +  strconv.Itoa(port)
+	
 
-	// Create a UDP connection for listening
-	conn, err := net.ListenUDP("udp", udpAddr)
+	// Create a UDP address
+	udpAddr, err := net.ResolveUDPAddr("udp", broadcastAddr)
 	if err != nil {
-		fmt.Println("Error creating UDP connection:", err)
-		return
+			fmt.Println("Error resolving UDP address:", err)
+			return
+	}
+
+	// Create a UDP connection
+	conn, err := net.DialUDP("udp", nil, udpAddr)
+	if err != nil {
+			fmt.Println("Error creating UDP connection:", err)
+			return
 	}
 	defer conn.Close()
 
-	fmt.Println("Listening for broadcast messages on port 8989")
+	fmt.Println("Broadcasting to", broadcastAddr)
 
-	buffer := make([]byte, 1024)
+	// Broadcast the message every 30 seconds
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
 
 	for {
-		// Read incoming UDP messages
-		n, addr, err := conn.ReadFromUDP(buffer)
-		if err != nil {
-			fmt.Println("Error receiving message:", err)
-			continue
-		}
-
-		// Print the received message
-		message := string(buffer[:n])
-		fmt.Printf("Received message from %s: %s\n", addr, message)
+			select {
+			case <-ticker.C:
+					// Send the broadcast message
+					_, err := conn.Write([]byte(message))
+					if err != nil {
+							fmt.Println("Error sending message:", err)
+					} else {
+							fmt.Println("Message broadcasted:", message)
+					}
+			}
 	}
+}
+
+func scanManager() {
+
 }

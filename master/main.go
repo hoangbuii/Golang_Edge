@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
 func main() {
@@ -9,7 +10,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error set excutable for the script: %v", err)
 	}
-	go broadcastToLAN("ens33", 8989, "Manager")
+	go listenBroadcast()
 	for {
 		var input string
 		fmt.Scanln(&input)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 )
 
@@ -10,6 +9,7 @@ func setExecutablePermissions() error {
 	actions_list := []string {
 		"./actions/get_join_token.sh",
 		"./actions/list_node.sh",
+		"./actions/remove_down_node.sh",
 	}
 
 	for _, action := range actions_list {

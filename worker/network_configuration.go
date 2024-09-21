@@ -107,3 +107,31 @@ func showNetworkConfiguration() {
 		fmt.Println()
 	}
 }
+
+func getBoardcastAddr(interfaceName string) (string, error) {
+	// Get the network interface by name
+	iface, err := net.InterfaceByName(interfaceName)
+	if err != nil {
+		return "", fmt.Errorf("error getting interface %s: %v", interfaceName, err)
+	}
+
+	// Get the addresses associated with the interface
+	addrs, err := iface.Addrs()
+	if err != nil {
+		return "", fmt.Errorf("error getting addresses for interface %s: %v", interfaceName, err)
+	}
+
+	// Loop through the addresses to find the first IPv4 address
+	for _, addr := range addrs {
+		ipNet, ok := addr.(*net.IPNet)
+		if !ok || ipNet.IP.To4() == nil {
+			continue
+		}
+
+		// Calculate the broadcast address
+		broadcast := calculateBroadcast(ipNet.IP, ipNet.Mask)
+		return broadcast.String(), nil
+	}
+
+	return "", fmt.Errorf("no IPv4 address found for interface %s", interfaceName)
+}

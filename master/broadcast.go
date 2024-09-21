@@ -7,53 +7,46 @@ import (
 	"strconv"
 )
 
-func broadcastToLAN(interface string, port int , managerID string) {
-	// port := 8989
-	broadcastAddr, err := getBoardcastAddr(interface)
-	message := managerID
+func listenBroadcast() {
+	// Set the port to listen on (same as the broadcast port)
+	listenAddr := ":8989"
 
-	
+	// Create a UDP address for listening
+	udpAddr, err := net.ResolveUDPAddr("udp", listenAddr)
 	if err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("Error resolving UDP address:", err)
 		return
 	}
-	fmt.Println("Broadcast:", broadcastAddr)
-	// Set the broadcast address and port
-	//broadcastAddr := "192.168.79.255:8989"
-	broadcastAddr = broadcastAddr + ":" +  strconv.Itoa(port)
-	
 
-	// Create a UDP address
-	udpAddr, err := net.ResolveUDPAddr("udp", broadcastAddr)
+	// Create a UDP connection for listening
+	conn, err := net.ListenUDP("udp", udpAddr)
 	if err != nil {
-			fmt.Println("Error resolving UDP address:", err)
-			return
-	}
-
-	// Create a UDP connection
-	conn, err := net.DialUDP("udp", nil, udpAddr)
-	if err != nil {
-			fmt.Println("Error creating UDP connection:", err)
-			return
+		fmt.Println("Error creating UDP connection:", err)
+		return
 	}
 	defer conn.Close()
 
-	fmt.Println("Broadcasting to", broadcastAddr)
+	fmt.Println("Listening for broadcast messages on port 8989")
 
-	// Broadcast the message every 30 seconds
-	ticker := time.NewTicker(10 * time.Second)
-	defer ticker.Stop()
+	buffer := make([]byte, 1024)
 
 	for {
-			select {
-			case <-ticker.C:
-					// Send the broadcast message
-					_, err := conn.Write([]byte(message))
-					if err != nil {
-							fmt.Println("Error sending message:", err)
-					} else {
-							fmt.Println("Message broadcasted:", message)
-					}
-			}
+		// Read incoming UDP messages
+		n, addr, err := conn.ReadFromUDP(buffer)
+		if err != nil {
+			fmt.Println("Error receiving message:", err)
+			continue
+		}
+
+		// Print the received message
+		message := string(buffer[:n])
+		fmt.Printf("Received message from %s: %s\n", addr, message)
+
+		_, err = conn.WriteToUDP([]byte(message), addr)
+		if err != nil {
+			fmt.Println("Error sending echo message:", err)
+		} else {
+			fmt.Println("Echoed message back to", addr)
+		}
 	}
 }
