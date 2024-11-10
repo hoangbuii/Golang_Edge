@@ -20,8 +20,8 @@ go version
 ```
 
 ```bash
-rm -rf go
-rm go1.20.7.linux-amd64.tar.gz
+sudo rm -rf go
+sudo rm go1.20.7.linux-amd64.tar.gz
 ```
 
 ```bash
