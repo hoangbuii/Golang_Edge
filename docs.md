@@ -8,19 +8,20 @@ wget https://go.dev/dl/go1.20.7.linux-amd64.tar.gz
 ```
 
 ```bash
-sudo tar -C /usr/local -xzf go1.20.7.linux-amd64.tar.gz
+sudo tar -xzf go1.20.7.linux-amd64.tar.gz
 ```
 
 ```bash
-export PATH=$PATH:/usr/local/go/bin
-```
-
-```bash
-source ~/.profile 
+sudo mv go/bin/* /usr/local/bin
 ```
 
 ```bash
 go version
+```
+
+```bash
+rm -rf go
+rm go1.20.7.linux-amd64.tar.gz
 ```
 
 ```bash
